@@ -6,13 +6,13 @@ output: github_document
 
 ## Problem 1
 
-```{r}
+```{r load_packages}
 library(tidyverse)
 ```
 
 Create a data frame with specified elements:
 
-```{r}
+```{r create_df}
 prob_1_df <- 
   tibble(
     samp = rnorm(10),
@@ -24,7 +24,7 @@ prob_1_df <-
 
 Take the mean of each variable in the data frame:
 
-```{r}
+```{r mean_var}
 mean(pull(prob_1_df, samp))
 mean(pull(prob_1_df, samp_gt_0))
 mean(pull(prob_1_df, char_vec))
@@ -33,11 +33,24 @@ mean(pull(prob_1_df, factor_vec))
 
 I can take the mean of numbers and logical but not character factor.
 
-```{r}
+```{r convert_numeric, results = FALSE, warning = FALSE}
 as.numeric(pull(prob_1_df, samp))
 as.numeric(pull(prob_1_df, samp_gt_0))
 as.numeric(pull(prob_1_df, char_vec))
 as.numeric(pull(prob_1_df, factor_vec))
+```
+
+When I apply as.numeric to the numeric, logical, and factor vectors, I get 
+numbers, but when I apply as.numeric to the character vector, I get NA 10x. This
+helps explain why I could not take the mean of the character vector - character 
+does not convert to numeric.
+
+Convert logical variable to different variable types (numeric, factor) multiply:
+
+```{r convert_var_type}
+as.numeric(pull(prob_1_df, samp_gt_0)) * pull(prob_1_df, samp)
+as.factor(pull(prob_1_df, samp_gt_0)) * pull(prob_1_df, samp)
+as.numeric(as.factor(pull(prob_1_df, samp_gt_0))) * pull(prob_1_df, samp)
 ```
 
 
