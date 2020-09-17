@@ -33,6 +33,8 @@ mean(pull(prob_1_df, factor_vec))
 
 I can take the mean of numbers and logical but not character factor.
 
+Convert all variables to numeric type:
+
 ```{r convert_numeric, results = FALSE, warning = FALSE}
 as.numeric(pull(prob_1_df, samp))
 as.numeric(pull(prob_1_df, samp_gt_0))
@@ -48,11 +50,22 @@ does not convert to numeric.
 Convert logical variable to different variable types (numeric, factor) multiply:
 
 ```{r convert_var_type}
+#convert logical to numeric and multiply by numeric
 as.numeric(pull(prob_1_df, samp_gt_0)) * pull(prob_1_df, samp)
+
+#convert logical to factor and multiply by numeric
 as.factor(pull(prob_1_df, samp_gt_0)) * pull(prob_1_df, samp)
+
+#convert logical to factor, then convert the converted vector to numeric, multiply by numeric
 as.numeric(as.factor(pull(prob_1_df, samp_gt_0))) * pull(prob_1_df, samp)
 ```
 
+When I convert a logical vector to numeric, I can treat the converted vector as 
+a numeric vector in a mathematical expression, and get numeric output. R treats factor 
+vectors as non-numeric automatically, resulting in "NA" output when I convert a logical 
+vector to factor and try to use it in a mathematical expression. However, it is 
+possible to convert the factor to numeric and use this twice converted vector 
+in a mathematical expression.
 
 ## Problem 2
 
@@ -65,19 +78,34 @@ data("penguins", package = "palmerpenguins")
 Describe penguins dataset:
 
 ```{r describe_penguins, echo=TRUE}
+
+#view data and variables in dataset penguins
 view(penguins)
 head(penguins)
+
+#rows in dataset penguins
 nrow(penguins)
+#columns in dataset penguins
 ncol(penguins)
-mean_length <- mean(pull(penguins, flipper_length_mm), na.rm=TRUE)
+
+mean_flipper_length <- mean(pull(penguins, flipper_length_mm), na.rm = TRUE)
 ```
 
-The penguins dataset has 344 columns and 8 rows. The mean flipper length is `r round(mean_length, digits=2)`.
+The penguins dataset has 344 rows and 8 columns. The variables are: 1) species, 2) island, 3) bill length (mm), 4) bill depth (mm), 5) flipper length (mm), 6) body mass (g), 7) sex, and 8) year. The mean flipper length is `r round(mean_flipper_length, digits=2)`.
 
 Make a scatterplot of flipper length vs. bill length:
 
 ```{r scatter_flipper_bill}
-scatter <- ggplot(data = penguins, mapping = aes(x = bill_length_mm, y = flipper_length_mm, color = species)) + geom_point()
+prob_2_scatter <- ggplot(
+  data = penguins, 
+  mapping = aes(
+    x = bill_length_mm, 
+    y = flipper_length_mm, 
+    color = species)) + 
+  geom_point(na.rm = TRUE)
 
-ggsave("scatter_plot.pdf", height = 4, width = 6)
+prob_2_scatter
+
+#export plot to directory
+ggsave("prob2_scatter.pdf", height = 4, width = 6)
 ```
