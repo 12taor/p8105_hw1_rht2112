@@ -73,3 +73,11 @@ mean_length <- mean(pull(penguins, flipper_length_mm), na.rm=TRUE)
 ```
 
 The penguins dataset has 344 columns and 8 rows. The mean flipper length is `r round(mean_length, digits=2)`.
+
+Make a scatterplot of flipper length vs. bill length:
+
+```{r scatter_flipper_bill}
+scatter <- ggplot(data = penguins, mapping = aes(x = bill_length_mm, y = flipper_length_mm, color = species)) + geom_point()
+
+ggsave("scatter_plot.pdf", height = 4, width = 6)
+```
