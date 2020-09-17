@@ -55,3 +55,21 @@ as.numeric(as.factor(pull(prob_1_df, samp_gt_0))) * pull(prob_1_df, samp)
 
 
 ## Problem 2
+
+Load penguins dataset:
+
+```{r load_penguins}
+data("penguins", package = "palmerpenguins")
+```
+
+Describe penguins dataset:
+
+```{r describe_penguins, echo=TRUE}
+view(penguins)
+head(penguins)
+nrow(penguins)
+ncol(penguins)
+mean_length <- mean(pull(penguins, flipper_length_mm), na.rm=TRUE)
+```
+
+The penguins dataset has 344 columns and 8 rows. The mean flipper length is `r round(mean_length, digits=2)`.
